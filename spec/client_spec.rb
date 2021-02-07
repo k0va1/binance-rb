@@ -229,7 +229,7 @@ RSpec.describe Binance::Client do
       end
 
       context "with invalid params" do
-        subject { client.historical_trades(symbol: "aaa", from_id: 100) }
+        subject { client.agg_trades(symbol: "aaa", from_id: 100) }
 
         it "raises ivalid params error" do
           expect { subject }.to raise_error(Binance::InvalidParamsError)
@@ -239,7 +239,35 @@ RSpec.describe Binance::Client do
     end
 
     describe "#klines" do
+      before do
+        stub_request(:get, "https://api.binance.com/api/v3/klines")
+          .with(query: { "symbol": "BTC_USDT", "interval": "1m", "limit": "500" })
+          .to_return(status: 200, body: request_mock(:klines))
+      end
 
+      let(:params) { { symbol: "BTC_USDT", interval: "1m" } }
+
+      subject { client.klines(params) }
+
+      it "returns klines" do
+        expect(subject.status).to eq(200)
+        expect(subject.klines.first.open_time).to eq(1499040000000)
+        expect(subject.klines.first.price).to eq("0.01633102")
+        expect(subject.klines.first.qty).to eq("4.70443515")
+        expect(subject.klines.first.first_trade_id).to eq(27781)
+        expect(subject.klines.first.last_trade_id).to eq(27781)
+        expect(subject.klines.first.timestamp).to eq(1498793709153)
+        expect(subject.klines.first.is_buyer_maker).to eq(true)
+        expect(subject.klines.first.is_best_price_match).to eq(true)
+      end
+
+      context "with invalid params" do
+        let(:params) { { symbol: "aaa", interval: 100 } }
+
+        it "raises ivalid params error" do
+          expect { subject }.to raise_error(Binance::InvalidParamsError)
+        end
+      end
     end
 
     describe "#avg_price" do

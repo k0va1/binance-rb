@@ -71,15 +71,12 @@ module Binance
       map_response(resp,nil, Binance::AggTradesResponse, :agg_trades)
     end
 
-    def klines(symbol, interval, start_time = nil, end_time = nil, limit = 500)
-      params = KlinesParams.new(
-        symbol: symbol,
-        limit: limit,
-        interval: interval,
-        start_time: start_time,
-        end_time: end_time
-      )
-      http_client.get("klines", params: params)
+    def klines(params)
+      validated_params = Binance::KlinesParamsSchema.call(**params)
+      raise ::Binance::InvalidParamsError if validated_params.failure?
+
+      resp = http_client.get("klines", params: validated_params)
+      map_response(resp,nil, Binance::KlinesResponse, :klines)
     end
 
     def avg_price(symbol)

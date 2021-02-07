@@ -204,4 +204,18 @@ module Binance
     attribute :items, Types::Array.of(PriceChange24)
   end
 
+  KlinesResponse = Class.new(BaseResponse) do
+    attribute :open_time, Types::Integer
+    attribute :open, Types::String
+    attribute :high, Types::String
+    attribute :low, Types::String
+    attribute :close, Types::String
+    attribute :volume, Types::String
+    attribute :close_time, Types::Integer
+    attribute :quote_asset_volume, Types::String
+    attribute :number_of_trades, Types::Integer
+    attribute :taker_buy_base_asset_volume, Types::String
+    attribute :taker_buy_quote_asset_volume, Types::String
+    attribute :ignore, Types::String
+  end
 end
