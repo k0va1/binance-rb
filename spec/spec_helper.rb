@@ -7,7 +7,7 @@ rescue LoadError
 end
 
 require "binance/client"
-require 'webmock/rspec'
+require "webmock/rspec"
 
 SPEC_ROOT = Pathname(__dir__)
 

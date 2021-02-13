@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    binance-rb (0.1.0)
+    binance (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -98,7 +98,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  binance-rb!
+  binance!
   dry-monads
   dry-struct
   dry-types

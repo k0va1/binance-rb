@@ -1,22 +1,22 @@
 require_relative 'lib/binance/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "binance-rb"
+  spec.name          = "binance"
   spec.version       = Binance::VERSION
   spec.authors       = ["k0va1"]
   spec.email         = ["al3xander.koval@gmail.com"]
 
-  spec.summary       = "Binance API wrapper written on Ruby"
-  spec.description   = "Simple convinient wrapper for Binance API"
-  spec.homepage      = "https://gitlab.pwlnh.com/3commas/binance-api"
+  spec.summary       = "Binance API client written on Ruby"
+  spec.description   = "Simple convinient client for Binance API. Spot, futures, options, withdrawals"
+  spec.homepage      = "https://github.com/k0va1/binance-rb"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://gitlab.pwlnh.com/3commas/binance-api"
-  spec.metadata["changelog_uri"] = "https://gitlab.pwlnh.com/3commas/binance-api/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/k0va1/binance-rb"
+  spec.metadata["changelog_uri"] = "https://github.com/k0va1/binance-rb/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
