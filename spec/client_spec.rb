@@ -275,7 +275,29 @@ RSpec.describe Binance::Client do
     end
 
     describe "#avg_price" do
+      before do
+        stub_request(:get, "https://api.binance.com/api/v3/avgPrice")
+          .with(query: { "symbol": "BTC_USDT" })
+          .to_return(status: 200, body: request_mock(:avg_price))
+      end
 
+      let(:params) { { symbol: "BTC_USDT" } }
+
+      subject { client.avg_price(params) }
+
+      it "returns avg price" do
+        expect(subject.status).to eq(200)
+        expect(subject.mins).to eq(5)
+        expect(subject.price).to eq("9.35751834")
+      end
+
+      context "with invalid params" do
+        let(:params) { { symbol: "aaa" } }
+
+        it "raises ivalid params error" do
+          expect { subject }.to raise_error(Binance::InvalidParamsError)
+        end
+      end
     end
 
     describe "#price_change_24h" do
@@ -341,6 +363,86 @@ RSpec.describe Binance::Client do
           expect(subject.items.first.first_id).to eq(28385)
           expect(subject.items.first.last_id).to eq(28460)
           expect(subject.items.first.count).to eq(76)
+        end
+      end
+    end
+
+    describe "#symbol_price" do
+      context "when symbol" do
+        before do
+          stub_request(:get, "https://api.binance.com/api/v3/ticker/price")
+            .with(query: { "symbol": "LTCBTC" })
+            .to_return(status: 200, body: request_mock(:symbol_price))
+        end
+
+        subject { client.symbol_price(symbol: "LTCBTC") }
+
+        it "returns symbol price" do
+          expect(subject.status).to eq(200)
+          expect(subject.symbol).to eq("LTCBTC")
+          expect(subject.price).to eq("4.00000200")
+        end
+      end
+
+      context "without symbol" do
+        before do
+          stub_request(:get, "https://api.binance.com/api/v3/ticker/price")
+            .to_return(status: 200, body: request_mock(:symbol_prices))
+        end
+
+        subject { client.symbol_price }
+
+        it "returns array of symbol prices" do
+          expect(subject.status).to eq(200)
+          expect(subject.symbols[0].symbol).to eq("LTCBTC")
+          expect(subject.symbols[0].price).to eq("4.00000200")
+          expect(subject.symbols[1].symbol).to eq("ETHBTC")
+          expect(subject.symbols[1].price).to eq("0.07946600")
+        end
+      end
+    end
+
+    describe "#order_book_ticker" do
+      context "when symbol" do
+        before do
+          stub_request(:get, "https://api.binance.com/api/v3/ticker/bookTicker")
+            .with(query: { "symbol": "LTCBTC" })
+            .to_return(status: 200, body: request_mock(:order_book_ticker))
+        end
+
+        subject { client.order_book_ticker(symbol: "LTCBTC") }
+
+        it "returns symbol price" do
+          expect(subject.status).to eq(200)
+          expect(subject.symbol).to eq("LTCBTC")
+          expect(subject.bid_price).to eq("4.00000000")
+          expect(subject.bid_qty).to eq("431.00000000")
+          expect(subject.ask_price).to eq("4.00000200")
+          expect(subject.ask_qty).to eq("9.00000000")
+        end
+      end
+
+      context "without symbol" do
+        before do
+          stub_request(:get, "https://api.binance.com/api/v3/ticker/bookTicker")
+            .to_return(status: 200, body: request_mock(:order_book_tickers))
+        end
+
+        subject { client.order_book_ticker }
+
+        it "returns array of symbol prices" do
+          expect(subject.status).to eq(200)
+          expect(subject.order_book_items[0].symbol).to eq("LTCBTC")
+          expect(subject.order_book_items[0].bid_price).to eq("4.00000000")
+          expect(subject.order_book_items[0].bid_qty).to eq("431.00000000")
+          expect(subject.order_book_items[0].ask_price).to eq("4.00000200")
+          expect(subject.order_book_items[0].ask_qty).to eq("9.00000000")
+
+          expect(subject.order_book_items[1].symbol).to eq("ETHBTC")
+          expect(subject.order_book_items[1].bid_price).to eq("0.07946700")
+          expect(subject.order_book_items[1].bid_qty).to eq("9.00000000")
+          expect(subject.order_book_items[1].ask_price).to eq("100000.00000000")
+          expect(subject.order_book_items[1].ask_qty).to eq("1000.00000000")
         end
       end
     end

@@ -79,13 +79,18 @@ module Binance
       map_response(resp, nil, Binance::KlinesResponse, :klines)
     end
 
-    def avg_price(symbol)
-      params = AvgPriceParams.new(symbol: symbol)
-      http_client.get("avgPrice", params: params)
+    def avg_price(params)
+      validated_params = Binance::AvgPriceParamsSchema.call(**params)
+      raise ::Binance::InvalidParamsError if validated_params.failure?
+
+      resp = http_client.get("avgPrice", params: validated_params)
+      map_response(resp, AvgPriceResponse)
     end
 
-    def price_change_24h(**params)
-      validated_params = Binance::PriceChange24ParamsSchema.call(params)
+    def price_change_24h(params = {})
+      validated_params = Binance::PriceChange24ParamsSchema.call(**params)
+      raise ::Binance::InvalidParamsError if validated_params.failure?
+
       resp = http_client.get("ticker/24hr", params: validated_params)
       map_response(
         resp,
@@ -94,14 +99,30 @@ module Binance
       )
     end
 
-    def symbol_price(symbol = nil)
-      params = SymbolPriceParams.new(symbol: symbol)
-      http_client.get("ticker/price", params: params)
+    def symbol_price(params = {})
+      validated_params = Binance::SymbolPriceParamsSchema.call(**params)
+      raise ::Binance::InvalidParamsError if validated_params.failure?
+
+      resp = http_client.get("ticker/price", params: validated_params)
+      map_response(
+        resp,
+        Binance::SymbolPriceResponse,
+        Binance::SymbolPriceArrayResponse,
+        :symbols
+      )
     end
 
-    def order_book_ticker(symbol = nil)
-      params = OrderBookTickerParams.new(symbol: symbol)
-      http_client.get("ticker/bookTicker", params: params)
+    def order_book_ticker(params = {})
+      validated_params = Binance::OrderBookTickerParamsSchema.call(**params)
+      raise ::Binance::InvalidParamsError if validated_params.failure?
+
+      resp = http_client.get("ticker/bookTicker", params: validated_params)
+      map_response(
+        resp,
+        Binance::OrderBookItemResponse,
+        Binance::OrderBookItemArrayResponse,
+        :order_book_items
+      )
     end
 
     # account endpoints

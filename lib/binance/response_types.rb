@@ -223,4 +223,41 @@ module Binance
   KlinesResponse = Class.new(BaseResponse) do
     attribute :klines, Types::Array.of(Binance::Kline)
   end
+
+  AvgPriceResponse = Class.new(BaseResponse) do
+    attribute :mins, Types::Integer
+    attribute :price, Types::String
+  end
+
+  SymbolPrice = Class.new(BaseStruct) do
+    attribute :symbol, Types::Symbol
+    attribute :price, Types::String
+  end
+
+  SymbolPriceResponse = Class.new(SymbolPrice) do
+    attribute :status, Types::Strict::Integer
+    attribute :headers, Types::Strict::Hash
+  end
+
+  SymbolPriceArrayResponse = Class.new(BaseResponse) do
+    attribute :symbols, Types::Array.of(SymbolPrice)
+  end
+
+  OrderBookItem = Class.new(BaseStruct) do
+    attribute :symbol, Types::Symbol
+    attribute :bid_price, Types::String
+    attribute :bid_qty, Types::String
+    attribute :ask_price, Types::String
+    attribute :ask_qty, Types::String
+  end
+
+  OrderBookItemResponse = Class.new(OrderBookItem) do
+    attribute :status, Types::Strict::Integer
+    attribute :headers, Types::Strict::Hash
+  end
+
+  OrderBookItemArrayResponse = Class.new(BaseResponse) do
+    attribute :order_book_items, Types::Array.of(OrderBookItem)
+  end
+
 end
