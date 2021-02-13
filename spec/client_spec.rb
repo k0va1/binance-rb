@@ -252,13 +252,17 @@ RSpec.describe Binance::Client do
       it "returns klines" do
         expect(subject.status).to eq(200)
         expect(subject.klines.first.open_time).to eq(1499040000000)
-        expect(subject.klines.first.price).to eq("0.01633102")
-        expect(subject.klines.first.qty).to eq("4.70443515")
-        expect(subject.klines.first.first_trade_id).to eq(27781)
-        expect(subject.klines.first.last_trade_id).to eq(27781)
-        expect(subject.klines.first.timestamp).to eq(1498793709153)
-        expect(subject.klines.first.is_buyer_maker).to eq(true)
-        expect(subject.klines.first.is_best_price_match).to eq(true)
+        expect(subject.klines.first.open).to eq("0.01634790")
+        expect(subject.klines.first.high).to eq("0.80000000")
+        expect(subject.klines.first.low).to eq("0.01575800")
+        expect(subject.klines.first.close).to eq("0.01577100")
+        expect(subject.klines.first.volume).to eq("148976.11427815")
+        expect(subject.klines.first.close_time).to eq(1499644799999)
+        expect(subject.klines.first.quote_asset_volume).to eq("2434.19055334")
+        expect(subject.klines.first.number_of_trades).to eq(308)
+        expect(subject.klines.first.taker_buy_base_asset_volume).to eq("1756.87402397")
+        expect(subject.klines.first.taker_buy_quote_asset_volume).to eq("28.46694368")
+        expect(subject.klines.first.ignore).to eq("17928899.62484339")
       end
 
       context "with invalid params" do

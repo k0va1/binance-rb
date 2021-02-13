@@ -204,7 +204,8 @@ module Binance
     attribute :items, Types::Array.of(PriceChange24)
   end
 
-  KlinesResponse = Class.new(BaseResponse) do
+  # convert binance hueta to named attributes
+  Kline = Class.new(BaseStruct) do
     attribute :open_time, Types::Integer
     attribute :open, Types::String
     attribute :high, Types::String
@@ -217,5 +218,9 @@ module Binance
     attribute :taker_buy_base_asset_volume, Types::String
     attribute :taker_buy_quote_asset_volume, Types::String
     attribute :ignore, Types::String
+  end
+
+  KlinesResponse = Class.new(BaseResponse) do
+    attribute :klines, Types::Array.of(Binance::Kline)
   end
 end

@@ -76,7 +76,7 @@ module Binance
       raise ::Binance::InvalidParamsError if validated_params.failure?
 
       resp = http_client.get("klines", params: validated_params)
-      map_response(resp,nil, Binance::KlinesResponse, :klines)
+      map_response(resp, nil, Binance::KlinesResponse, :klines)
     end
 
     def avg_price(symbol)
@@ -276,6 +276,12 @@ module Binance
       if res.success?
         case parsed_body
         when Array
+          # TODO: refactor this shit
+          if array_response_class == KlinesResponse
+            keys = Binance::Kline.schema.keys.map(&:name)
+            parsed_body.map! { |kl| Hash[*keys.zip(kl).flatten] }
+          end
+
           array_response_class.new(
             status: res.status,
             headers: res.headers,
