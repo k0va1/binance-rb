@@ -326,10 +326,12 @@ module Binance
   end
 end
 
+# require "binance/client"
 # client = Binance::Client.new do |c|
-#   c.api_key = "api_key"
-#   c.secret_key = "secret_key"
+#   c.api_key = "brza5CuVYwhMC0bopCUX8ivhlBL8SvMMViybNnigBBBhfPxT5ZfVT3NHyamiLnZb"
+#   c.secret_key = "VHCwOfaRQSswaHdS62fqbV0zLGcn1fl5EhlufhUwkF39F1T10Ojd5byPnftSglEA"
 # end
+# client.exchange_info
 #
 # futures_client = Binance::Futures::Client.new do |c|
 #   c.api_key = "api_key"
