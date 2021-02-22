@@ -16,8 +16,7 @@ module Binance
     end
 
     def connection
-      @connection ||= Faraday.new(url: url) do |c|
-      end
+      @connection ||= Faraday.new(url: url)
     end
 
     def get(name, params: {})
